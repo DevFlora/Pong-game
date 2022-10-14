@@ -1,6 +1,8 @@
 from turtle import *
 from random import *
 from time import *
+import sys
+sys.setrecursionlimit(10000006)
 
 setup(440,600)
 title("Flora's Pong Game")
@@ -18,6 +20,9 @@ player = factor("square", (1,4), (0,-150))
 
 ball = factor("circle", (1,1), (0,200), "Purple")
 
+msg = Turtle(visible=False)
+
+
 def left():
     if player.xcor() != -220: 
         player.bk(10)
@@ -26,8 +31,8 @@ def right():
     if player.xcor() != 220:
         player.fd(10)
 
-onkey(left,"Left")
-onkey(right,"Right")
+onkeypress(left,"Left")
+onkeypress(right,"Right")
 
 listen()
 
@@ -44,13 +49,14 @@ def ballMoving(ballXSpeed,ballYSpeed):
     if ballY > 300:
         ballYSpeed *= -1
     elif ballY < -300:
+        msg.write("Failed", False, "center", (None, 30))
         return
 
-    if player.distance(ball) <= 30:
-        ballYSpeed *= -1
+    if player.distance(ball) <= 30 and -170 < ball.ycor() > -150:
+        ballYSpeed *= -1        
+        ballXSpeed *= -1
 
     ontimer(ballMoving(ballXSpeed,ballYSpeed), 200)
 
 ballMoving(5,5)
-
-done()
+bye()
